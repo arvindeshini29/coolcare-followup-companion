@@ -32,7 +32,7 @@ function Settings() {
   async function save(e: React.FormEvent) {
     e.preventDefault();
     const r = schema.safeParse(v);
-    if (!r.success) return setErr(r.error.issues[0].message);
+    if (!r.success) return setErr(r.error.issues[0]?.message ?? "Invalid");
     setErr(null);
     setSaving(true);
     const { error } = await supabase.from("profiles").upsert({ id: user.id, ...r.data });

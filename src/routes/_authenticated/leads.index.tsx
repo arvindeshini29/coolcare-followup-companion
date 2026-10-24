@@ -11,12 +11,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-type Search = { q?: string; status?: LeadStatus };
+type Search = { q?: string | undefined; status?: LeadStatus | undefined };
 
 export const Route = createFileRoute("/_authenticated/leads/")({
   validateSearch: (s: Record<string, unknown>): Search => ({
-    q: typeof s.q === "string" ? s.q : undefined,
-    status: STATUSES.includes(s.status as LeadStatus) ? (s.status as LeadStatus) : undefined,
+    q: typeof s["q"] === "string" ? s["q"] : undefined,
+    status: STATUSES.includes(s["status"] as LeadStatus) ? (s["status"] as LeadStatus) : undefined,
   }),
   head: () => ({ meta: [{ title: "Leads — FollowUp Kit" }] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(leadsQuery),
@@ -43,7 +43,7 @@ function LeadsPage() {
   }, [leads, q, status]);
 
   function exportCsv() {
-    if (filtered.length === 0) return toast.error("No leads to export");
+    if (filtered.length === 0) { toast.error("No leads to export"); return; }
     const blob = new Blob(["\uFEFF" + leadsToCsv(filtered)], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");

@@ -19,7 +19,7 @@ export function StatusBadge({ status }: { status: LeadStatus }) {
   );
 }
 
-export function LeadCard({ lead, tone }: { lead: Lead; tone?: "overdue" | "today" }) {
+export function LeadCard({ lead, tone }: { lead: Lead; tone?: "overdue" | "today" | undefined }) {
   return (
     <Link
       to="/leads/$id"

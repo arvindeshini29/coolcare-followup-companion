@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 
 /** Prepares a message and opens WhatsApp. The technician presses Send themselves. */
 export function WhatsAppComposer({ lead, profile }: { lead: Lead; profile: Profile | null }) {
-  const [tpl, setTpl] = useState(TEMPLATES[0].id);
+  const [tpl, setTpl] = useState<string>(TEMPLATES[0]!.id);
   const [text, setText] = useState("");
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export function WhatsAppComposer({ lead, profile }: { lead: Lead; profile: Profi
 
   function open() {
     const url = whatsappUrl(lead.phone, text);
-    if (!url) return toast.error("This phone number isn't a valid Indian mobile number");
+    if (!url) { toast.error("This phone number isn't a valid Indian mobile number"); return; }
     window.open(url, "_blank", "noopener,noreferrer");
   }
 
