@@ -13,7 +13,12 @@ const STATUS_STYLE: Record<LeadStatus, string> = {
 
 export function StatusBadge({ status }: { status: LeadStatus }) {
   return (
-    <span className={cn("inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold", STATUS_STYLE[status])}>
+    <span
+      className={cn(
+        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold",
+        STATUS_STYLE[status],
+      )}
+    >
       {STATUS_LABEL[status]}
     </span>
   );
@@ -38,11 +43,19 @@ export function LeadCard({ lead, tone }: { lead: Lead; tone?: "overdue" | "today
         <StatusBadge status={lead.status} />
       </div>
       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
-        <span className="inline-flex items-center gap-1"><Phone className="h-3.5 w-3.5" aria-hidden />{lead.phone}</span>
+        <span className="inline-flex items-center gap-1">
+          <Phone className="h-3.5 w-3.5" aria-hidden />
+          {lead.phone}
+        </span>
         {lead.follow_up_date && (
-          <span className="inline-flex items-center gap-1"><CalendarClock className="h-3.5 w-3.5" aria-hidden />{formatDateIN(lead.follow_up_date)}</span>
+          <span className="inline-flex items-center gap-1">
+            <CalendarClock className="h-3.5 w-3.5" aria-hidden />
+            {formatDateIN(lead.follow_up_date)}
+          </span>
         )}
-        <span className="ml-auto font-semibold text-foreground">{formatINR(lead.quotation_amount)}</span>
+        <span className="ml-auto font-semibold text-foreground">
+          {formatINR(lead.quotation_amount)}
+        </span>
       </div>
     </Link>
   );

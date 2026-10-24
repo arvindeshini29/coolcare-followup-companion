@@ -24,7 +24,11 @@ function NewLead() {
           let data: { id: string } | null = null;
           let error: unknown = null;
           try {
-            ({ data, error } = await supabase.from("leads").insert(toLeadRow(v)).select("id").single());
+            ({ data, error } = await supabase
+              .from("leads")
+              .insert(toLeadRow(v))
+              .select("id")
+              .single());
           } catch (e) {
             error = e;
           }

@@ -25,7 +25,10 @@ function Settings() {
   const { data: profile } = useSuspenseQuery(profileQuery);
   const { user } = Route.useRouteContext();
   const qc = useQueryClient();
-  const [v, setV] = useState({ technician_name: profile?.technician_name ?? "", business_name: profile?.business_name ?? "" });
+  const [v, setV] = useState({
+    technician_name: profile?.technician_name ?? "",
+    business_name: profile?.business_name ?? "",
+  });
   const [err, setErr] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -45,20 +48,48 @@ function Settings() {
   return (
     <>
       <PageHeader title="Profile" subtitle={user.email ?? undefined} />
-      <form onSubmit={save} noValidate className="max-w-lg space-y-4 rounded-xl border border-border bg-card p-4 shadow-card sm:p-6">
+      <form
+        onSubmit={save}
+        noValidate
+        className="max-w-lg space-y-4 rounded-xl border border-border bg-card p-4 shadow-card sm:p-6"
+      >
         <div className="space-y-1.5">
-          <Label htmlFor="tn" className="font-semibold">Your name *</Label>
-          <Input id="tn" className="h-11 text-base" value={v.technician_name} maxLength={100} aria-invalid={!!err}
-            onChange={(e) => setV({ ...v, technician_name: e.target.value })} />
+          <Label htmlFor="tn" className="font-semibold">
+            Your name *
+          </Label>
+          <Input
+            id="tn"
+            className="h-11 text-base"
+            value={v.technician_name}
+            maxLength={100}
+            aria-invalid={!!err}
+            onChange={(e) => setV({ ...v, technician_name: e.target.value })}
+          />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="bn" className="font-semibold">Business name</Label>
-          <Input id="bn" className="h-11 text-base" placeholder="e.g. Cool Air Services" value={v.business_name} maxLength={100}
-            onChange={(e) => setV({ ...v, business_name: e.target.value })} />
-          <p className="text-xs text-muted-foreground">Used to sign your WhatsApp message templates.</p>
+          <Label htmlFor="bn" className="font-semibold">
+            Business name
+          </Label>
+          <Input
+            id="bn"
+            className="h-11 text-base"
+            placeholder="e.g. Cool Air Services"
+            value={v.business_name}
+            maxLength={100}
+            onChange={(e) => setV({ ...v, business_name: e.target.value })}
+          />
+          <p className="text-xs text-muted-foreground">
+            Used to sign your WhatsApp message templates.
+          </p>
         </div>
-        {err && <p role="alert" className="text-sm text-destructive">{err}</p>}
-        <Button type="submit" size="lg" disabled={saving}>{saving ? "Saving…" : "Save profile"}</Button>
+        {err && (
+          <p role="alert" className="text-sm text-destructive">
+            {err}
+          </p>
+        )}
+        <Button type="submit" size="lg" disabled={saving}>
+          {saving ? "Saving…" : "Save profile"}
+        </Button>
       </form>
     </>
   );

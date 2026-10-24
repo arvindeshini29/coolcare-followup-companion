@@ -1,6 +1,15 @@
 import { Link, Outlet, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { LayoutDashboard, Users, BellRing, MessageSquareText, Settings, LogOut, Plus, Snowflake } from "lucide-react";
+import {
+  LayoutDashboard,
+  Users,
+  BellRing,
+  MessageSquareText,
+  Settings,
+  LogOut,
+  Plus,
+  Snowflake,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 
@@ -27,7 +36,10 @@ export function AppShell() {
     <div className="min-h-screen bg-background pb-24 md:pb-8">
       <header className="sticky top-0 z-30 border-b border-border bg-card/90 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-5xl items-center gap-4 px-4">
-          <Link to="/dashboard" className="flex items-center gap-2 font-extrabold tracking-tight text-foreground">
+          <Link
+            to="/dashboard"
+            className="flex items-center gap-2 font-extrabold tracking-tight text-foreground"
+          >
             <span className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-primary text-primary-foreground">
               <Snowflake className="h-4 w-4" aria-hidden />
             </span>
@@ -47,7 +59,9 @@ export function AppShell() {
           </nav>
           <div className="ml-auto flex items-center gap-2">
             <Button asChild size="sm" className="hidden md:inline-flex">
-              <Link to="/leads/new"><Plus /> Add lead</Link>
+              <Link to="/leads/new">
+                <Plus /> Add lead
+              </Link>
             </Button>
             <Button variant="ghost" size="sm" onClick={signOut} aria-label="Sign out">
               <LogOut /> <span className="hidden sm:inline">Sign out</span>
@@ -91,7 +105,15 @@ export function AppShell() {
   );
 }
 
-export function PageHeader({ title, subtitle, action }: { title: string; subtitle?: string; action?: React.ReactNode }) {
+export function PageHeader({
+  title,
+  subtitle,
+  action,
+}: {
+  title: string;
+  subtitle?: string;
+  action?: React.ReactNode;
+}) {
   return (
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
       <div>
@@ -103,7 +125,17 @@ export function PageHeader({ title, subtitle, action }: { title: string; subtitl
   );
 }
 
-export function EmptyState({ icon: Icon, title, text, action }: { icon: React.ElementType; title: string; text: string; action?: React.ReactNode }) {
+export function EmptyState({
+  icon: Icon,
+  title,
+  text,
+  action,
+}: {
+  icon: React.ElementType;
+  title: string;
+  text: string;
+  action?: React.ReactNode;
+}) {
   return (
     <div className="rounded-xl border border-dashed border-border bg-card px-6 py-12 text-center">
       <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-primary-soft text-primary">

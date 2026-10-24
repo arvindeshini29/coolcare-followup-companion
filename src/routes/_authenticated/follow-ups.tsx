@@ -26,20 +26,34 @@ function FollowUps() {
 
   return (
     <>
-      <PageHeader title="Follow-ups" subtitle="Open leads with a follow-up date. Completed and lost leads are hidden." />
+      <PageHeader
+        title="Follow-ups"
+        subtitle="Open leads with a follow-up date. Completed and lost leads are hidden."
+      />
       {total === 0 ? (
-        <EmptyState icon={BellRing} title="No follow-ups scheduled" text="Set a follow-up date on a lead and it will appear here." />
+        <EmptyState
+          icon={BellRing}
+          title="No follow-ups scheduled"
+          text="Set a follow-up date on a lead and it will appear here."
+        />
       ) : (
         <div className="space-y-7">
           {SECTIONS.map((s) => (
             <section key={s.key} aria-labelledby={`fu-${s.key}`}>
-              <h2 id={`fu-${s.key}`} className="mb-3 flex items-center gap-2 text-lg font-bold text-foreground">
+              <h2
+                id={`fu-${s.key}`}
+                className="mb-3 flex items-center gap-2 text-lg font-bold text-foreground"
+              >
                 <span className={cn("h-2.5 w-2.5 rounded-full", s.dot)} aria-hidden />
                 {s.title}
-                <span className="text-sm font-semibold text-muted-foreground">({g[s.key].length})</span>
+                <span className="text-sm font-semibold text-muted-foreground">
+                  ({g[s.key].length})
+                </span>
               </h2>
               {g[s.key].length === 0 ? (
-                <p className="rounded-lg bg-muted px-4 py-3 text-sm text-muted-foreground">Nothing here.</p>
+                <p className="rounded-lg bg-muted px-4 py-3 text-sm text-muted-foreground">
+                  Nothing here.
+                </p>
               ) : (
                 <div className="grid gap-3 sm:grid-cols-2">
                   {g[s.key].map((l) => (

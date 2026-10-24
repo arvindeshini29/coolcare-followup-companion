@@ -19,7 +19,10 @@ export function WhatsAppComposer({ lead, profile }: { lead: Lead; profile: Profi
 
   function open() {
     const url = whatsappUrl(lead.phone, text);
-    if (!url) { toast.error("This phone number isn't a valid Indian mobile number"); return; }
+    if (!url) {
+      toast.error("This phone number isn't a valid Indian mobile number");
+      return;
+    }
     window.open(url, "_blank", "noopener,noreferrer");
   }
 
@@ -34,7 +37,9 @@ export function WhatsAppComposer({ lead, profile }: { lead: Lead; profile: Profi
             onClick={() => setTpl(t.id)}
             className={cn(
               "rounded-full border px-3 py-1.5 text-sm font-semibold",
-              tpl === t.id ? "border-primary bg-primary-soft text-accent-foreground" : "border-border bg-card text-muted-foreground",
+              tpl === t.id
+                ? "border-primary bg-primary-soft text-accent-foreground"
+                : "border-border bg-card text-muted-foreground",
             )}
           >
             {t.title}
@@ -42,13 +47,30 @@ export function WhatsAppComposer({ lead, profile }: { lead: Lead; profile: Profi
         ))}
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="wa-msg" className="font-semibold">Message (you can edit before opening)</Label>
-        <Textarea id="wa-msg" rows={5} className="text-base" value={text} onChange={(e) => setText(e.target.value)} maxLength={1500} />
+        <Label htmlFor="wa-msg" className="font-semibold">
+          Message (you can edit before opening)
+        </Label>
+        <Textarea
+          id="wa-msg"
+          rows={5}
+          className="text-base"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          maxLength={1500}
+        />
       </div>
-      <Button variant="whatsapp" size="lg" className="w-full sm:w-auto" onClick={open} disabled={!text.trim()}>
+      <Button
+        variant="whatsapp"
+        size="lg"
+        className="w-full sm:w-auto"
+        onClick={open}
+        disabled={!text.trim()}
+      >
         <MessageCircle /> Open in WhatsApp
       </Button>
-      <p className="text-xs text-muted-foreground">Nothing is sent automatically — WhatsApp opens with the message ready, and you tap Send.</p>
+      <p className="text-xs text-muted-foreground">
+        Nothing is sent automatically — WhatsApp opens with the message ready, and you tap Send.
+      </p>
     </div>
   );
 }

@@ -134,7 +134,11 @@ export function whatsappUrl(phone: string, message: string): string | null {
 }
 
 export const leadSchema = z.object({
-  customer_name: z.string().trim().min(1, "Customer name is required").max(100, "Max 100 characters"),
+  customer_name: z
+    .string()
+    .trim()
+    .min(1, "Customer name is required")
+    .max(100, "Max 100 characters"),
   phone: z
     .string()
     .trim()
@@ -143,9 +147,14 @@ export const leadSchema = z.object({
   quotation_amount: z
     .string()
     .trim()
-    .refine((v) => v === "" || (/^\d+(\.\d{1,2})?$/.test(v) && Number(v) <= 10000000), "Enter a valid amount in ₹"),
+    .refine(
+      (v) => v === "" || (/^\d+(\.\d{1,2})?$/.test(v) && Number(v) <= 10000000),
+      "Enter a valid amount in ₹",
+    ),
   status: z.enum(STATUSES),
-  follow_up_date: z.string().refine((v) => v === "" || /^\d{4}-\d{2}-\d{2}$/.test(v), "Invalid date"),
+  follow_up_date: z
+    .string()
+    .refine((v) => v === "" || /^\d{4}-\d{2}-\d{2}$/.test(v), "Invalid date"),
   notes: z.string().max(2000, "Max 2000 characters"),
 });
 export type LeadFormValues = z.infer<typeof leadSchema>;
@@ -170,7 +179,16 @@ function csvCell(v: unknown): string {
 }
 
 export function leadsToCsv(leads: Lead[]): string {
-  const header = ["Customer Name", "Phone", "AC Service", "Quotation (INR)", "Status", "Follow-up Date", "Notes", "Created Date"];
+  const header = [
+    "Customer Name",
+    "Phone",
+    "AC Service",
+    "Quotation (INR)",
+    "Status",
+    "Follow-up Date",
+    "Notes",
+    "Created Date",
+  ];
   const rows = leads.map((l) => [
     l.customer_name,
     l.phone,
@@ -214,7 +232,11 @@ export const TEMPLATES = [
   },
 ];
 
-export function fillTemplate(body: string, lead: Pick<Lead, "customer_name" | "service" | "quotation_amount">, profile: Profile | null): string {
+export function fillTemplate(
+  body: string,
+  lead: Pick<Lead, "customer_name" | "service" | "quotation_amount">,
+  profile: Profile | null,
+): string {
   return body
     .replaceAll("{customer}", lead.customer_name)
     .replaceAll("{service}", lead.service)
