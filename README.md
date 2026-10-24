@@ -16,6 +16,31 @@ Core MVP:
 
 Keep the MVP simple. Do not enable paid integrations or paid services without approval. If a cloud database/auth setup needs enabling or has a cost, explain it before enabling it. Avoid exposing customer data across accounts.
 
+## Local setup
+
+1. Install Node.js 20+ (or Bun) and run `npm install` (or `bun install`).
+2. Create a `.env` file (never commit it — `.gitignore` excludes `.env` and `.env.*`, except `.env.example`) with:
+   ```
+   VITE_SUPABASE_URL=...
+   VITE_SUPABASE_PUBLISHABLE_KEY=...
+   VITE_SUPABASE_PROJECT_ID=...
+   SUPABASE_URL=...
+   SUPABASE_PUBLISHABLE_KEY=...
+   ```
+   Only publishable keys belong here. Never put service-role keys or database passwords in client code or in the repo.
+3. `npm run dev` to start, `npm test` for unit tests, `npm run lint`, `npm run build`.
+
+## Database migrations
+
+SQL migrations live in `drizzle/migrations/`. On Lovable Cloud they are applied by Lovable. For your own backend, apply them in order with the SQL editor or `psql "$DATABASE_URL" -f <file>`. Test against a non-production database first; never run ad-hoc changes on production data.
+
+## Security reminders
+
+- Every `leads` and `profiles` row is protected by row-level security so each technician sees only their own records. Keep RLS enabled on any new table.
+- WhatsApp messages are only opened for manual sending; nothing is sent automatically.
+- CSV export guards against spreadsheet formula injection.
+- Do not commit `.env` files, export files containing customer data, or secrets.
+
 This project was built with [Lovable](https://lovable.dev).
 
 ## Build with Lovable
