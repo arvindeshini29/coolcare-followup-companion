@@ -30,7 +30,13 @@ function ResetPassword() {
     if (pw.length < 8) return setErr("Password must be at least 8 characters");
     if (pw !== pw2) return setErr("Passwords do not match");
     setBusy(true);
-    const { error } = await supabase.auth.updateUser({ password: pw });
+    let error: unknown = null;
+    try {
+      ({ error } = await supabase.auth.updateUser({ password: pw }));
+    } catch {
+      setBusy(false);
+      return setErr("Something went wrong. Check your internet connection and try again.");
+    }
     setBusy(false);
     if (error) return setErr("This reset link is invalid or has expired. Please request a new one.");
     toast.success("Password updated");

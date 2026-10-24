@@ -79,6 +79,8 @@ function AuthPage() {
         if (error) return setErr(error.message);
         setSent("If an account exists for this email, a reset link is on its way.");
       }
+    } catch {
+      setErr("Something went wrong. Check your internet connection and try again.");
     } finally {
       setBusy(false);
     }

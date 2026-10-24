@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { Download, Plus, Search, Users } from "lucide-react";
 import { toast } from "sonner";
 import { leadsQuery } from "@/lib/queries";
-import { STATUSES, STATUS_LABEL, leadsToCsv, todayISO, type LeadStatus } from "@/lib/crm";
+import { STATUSES, STATUS_LABEL, leadsToCsv, phoneMatches, todayISO, type LeadStatus } from "@/lib/crm";
 import { PageHeader, EmptyState } from "@/components/AppShell";
 import { LeadCard } from "@/components/LeadBits";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,6 @@ function LeadsPage() {
 
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    const digits = needle.replace(/\D/g, "");
     return leads.filter(
       (l) =>
         (!status || l.status === status) &&
@@ -38,7 +37,7 @@ function LeadsPage() {
           l.customer_name.toLowerCase().includes(needle) ||
           l.service.toLowerCase().includes(needle) ||
           l.notes.toLowerCase().includes(needle) ||
-          (digits.length > 0 && l.phone.includes(digits))),
+          phoneMatches(l.phone, q)),
     );
   }, [leads, q, status]);
 

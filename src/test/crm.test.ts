@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { dashboardStats, groupFollowUps, normalizeIndianPhone, whatsappUrl, formatINR, leadsToCsv, type Lead } from "@/lib/crm";
+import { dashboardStats, groupFollowUps, normalizeIndianPhone, phoneMatches, phoneSearchDigits, whatsappUrl, formatINR, leadsToCsv, type Lead } from "@/lib/crm";
 
 const base: Lead = {
   id: "1", user_id: "u", customer_name: "A", phone: "9876543210", service: "Gas Refilling",
@@ -44,5 +44,20 @@ describe("formatting", () => {
     const csv = leadsToCsv([{ ...base, customer_name: "=HACK", notes: 'say "hi", ok' }]);
     expect(csv).toContain("'=HACK");
     expect(csv).toContain('"say ""hi"", ok"');
+  });
+});
+
+describe("phone search", () => {
+  it("matches +91, 91 and leading-0 forms against saved 10-digit numbers", () => {
+    expect(phoneMatches("9876543210", "+91 98765 43210")).toBe(true);
+    expect(phoneMatches("9876543210", "919876543210")).toBe(true);
+    expect(phoneMatches("9876543210", "09876543210")).toBe(true);
+    expect(phoneMatches("9876543210", "+91 98765")).toBe(true);
+    expect(phoneMatches("9876543210", "43210")).toBe(true);
+  });
+  it("does not match different numbers or empty digits", () => {
+    expect(phoneMatches("9876543210", "+91 91234")).toBe(false);
+    expect(phoneMatches("9876543210", "ravi")).toBe(false);
+    expect(phoneSearchDigits("+91-98765")).toBe("98765");
   });
 });

@@ -45,10 +45,16 @@ function LeadDetail() {
           submitLabel="Save changes"
           onCancel={() => setEditing(false)}
           onSubmit={async (v) => {
-            const { error } = await supabase.from("leads").update(toLeadRow(v)).eq("id", lead.id);
+            let error: unknown = null;
+            try {
+              ({ error } = await supabase.from("leads").update(toLeadRow(v)).eq("id", lead.id));
+            } catch (e) {
+              error = e;
+            }
             if (error) return void toast.error("Could not update lead. Please try again.");
-            await qc.invalidateQueries({ queryKey: ["leads"] });
             toast.success("Lead updated");
+            // Write succeeded; a refresh failure must not be reported as a failed save.
+            await qc.invalidateQueries({ queryKey: ["leads"] }).catch(() => {});
             setEditing(false);
           }}
         />

@@ -111,6 +111,22 @@ export function normalizeIndianPhone(input: string): string | null {
   return /^[6-9]\d{9}$/.test(digits) ? digits : null;
 }
 
+/**
+ * Digits to match against saved 10-digit phones when searching.
+ * Strips +91 / 91 (when 12 digits) / leading 0 so "+91 98765" and "098765" match "98765...".
+ */
+export function phoneSearchDigits(query: string): string {
+  let d = query.replace(/\D/g, "");
+  if (/^\s*\+\s*91/.test(query) || (d.length === 12 && d.startsWith("91"))) d = d.slice(2);
+  else if (d.startsWith("0")) d = d.replace(/^0+/, "");
+  return d;
+}
+
+export function phoneMatches(savedPhone: string, query: string): boolean {
+  const d = phoneSearchDigits(query);
+  return d.length > 0 && savedPhone.includes(d);
+}
+
 export function whatsappUrl(phone: string, message: string): string | null {
   const p = normalizeIndianPhone(phone);
   if (!p) return null;

@@ -21,13 +21,20 @@ function NewLead() {
         submitLabel="Save lead"
         onCancel={() => navigate({ to: "/leads" })}
         onSubmit={async (v) => {
-          const { data, error } = await supabase.from("leads").insert(toLeadRow(v)).select("id").single();
-          if (error) {
+          let data: { id: string } | null = null;
+          let error: unknown = null;
+          try {
+            ({ data, error } = await supabase.from("leads").insert(toLeadRow(v)).select("id").single());
+          } catch (e) {
+            error = e;
+          }
+          if (error || !data) {
             toast.error("Could not save lead. Please try again.");
             return;
           }
-          await qc.invalidateQueries({ queryKey: ["leads"] });
           toast.success("Lead saved");
+          // Write succeeded; a refresh failure must not be reported as a failed save.
+          await qc.invalidateQueries({ queryKey: ["leads"] }).catch(() => {});
           navigate({ to: "/leads/$id", params: { id: data.id } });
         }}
       />

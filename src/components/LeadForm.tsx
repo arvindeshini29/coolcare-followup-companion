@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -47,6 +48,8 @@ export function LeadForm({
     setSaving(true);
     try {
       await onSubmit(r.data);
+    } catch {
+      toast.error("Could not save. Check your internet connection and try again.");
     } finally {
       setSaving(false);
     }
