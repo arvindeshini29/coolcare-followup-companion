@@ -4,7 +4,14 @@ import { useMemo } from "react";
 import { Download, Plus, Search, Users } from "lucide-react";
 import { toast } from "sonner";
 import { leadsQuery } from "@/lib/queries";
-import { STATUSES, STATUS_LABEL, leadsToCsv, todayISO, type LeadStatus } from "@/lib/crm";
+import {
+  STATUSES,
+  STATUS_LABEL,
+  leadsToCsv,
+  phoneMatches,
+  todayISO,
+  type LeadStatus,
+} from "@/lib/crm";
 import { PageHeader, EmptyState } from "@/components/AppShell";
 import { LeadCard } from "@/components/LeadBits";
 import { Button } from "@/components/ui/button";
@@ -30,7 +37,6 @@ function LeadsPage() {
 
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    const digits = needle.replace(/\D/g, "");
     return leads.filter(
       (l) =>
         (!status || l.status === status) &&
@@ -38,12 +44,15 @@ function LeadsPage() {
           l.customer_name.toLowerCase().includes(needle) ||
           l.service.toLowerCase().includes(needle) ||
           l.notes.toLowerCase().includes(needle) ||
-          (digits.length > 0 && l.phone.includes(digits))),
+          phoneMatches(l.phone, q)),
     );
   }, [leads, q, status]);
 
   function exportCsv() {
-    if (filtered.length === 0) { toast.error("No leads to export"); return; }
+    if (filtered.length === 0) {
+      toast.error("No leads to export");
+      return;
+    }
     const blob = new Blob(["\uFEFF" + leadsToCsv(filtered)], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -63,24 +72,41 @@ function LeadsPage() {
         subtitle={`${leads.length} total`}
         action={
           <div className="flex gap-2">
-            <Button variant="outline" onClick={exportCsv}><Download /> CSV</Button>
-            <Button asChild className="hidden md:inline-flex"><Link to="/leads/new"><Plus /> Add lead</Link></Button>
+            <Button variant="outline" onClick={exportCsv}>
+              <Download /> CSV
+            </Button>
+            <Button asChild className="hidden md:inline-flex">
+              <Link to="/leads/new">
+                <Plus /> Add lead
+              </Link>
+            </Button>
           </div>
         }
       />
       <div className="relative">
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
-        <label htmlFor="lead-search" className="sr-only">Search leads</label>
+        <Search
+          className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+          aria-hidden
+        />
+        <label htmlFor="lead-search" className="sr-only">
+          Search leads
+        </label>
         <Input
           id="lead-search"
           type="search"
           placeholder="Search name, phone, service…"
           className="h-11 bg-card pl-9 text-base"
           value={q}
-          onChange={(e) => navigate({ search: (p) => ({ ...p, q: e.target.value || undefined }), replace: true })}
+          onChange={(e) =>
+            navigate({ search: (p) => ({ ...p, q: e.target.value || undefined }), replace: true })
+          }
         />
       </div>
-      <div className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-1" role="group" aria-label="Filter by status">
+      <div
+        className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-1"
+        role="group"
+        aria-label="Filter by status"
+      >
         {chips.map((s) => {
           const active = s === status;
           return (
@@ -91,11 +117,15 @@ function LeadsPage() {
               onClick={() => navigate({ search: (p) => ({ ...p, status: s }), replace: true })}
               className={cn(
                 "shrink-0 rounded-full border px-3.5 py-1.5 text-sm font-semibold transition",
-                active ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground hover:text-foreground",
+                active
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border bg-card text-muted-foreground hover:text-foreground",
               )}
             >
               {s ? STATUS_LABEL[s] : "All"}
-              <span className="ml-1.5 opacity-70">{s ? leads.filter((l) => l.status === s).length : leads.length}</span>
+              <span className="ml-1.5 opacity-70">
+                {s ? leads.filter((l) => l.status === s).length : leads.length}
+              </span>
             </button>
           );
         })}
@@ -103,12 +133,29 @@ function LeadsPage() {
 
       <div className="mt-4">
         {leads.length === 0 ? (
-          <EmptyState icon={Users} title="No leads yet" text="Every enquiry you add will show up here." action={<Button asChild><Link to="/leads/new"><Plus /> Add lead</Link></Button>} />
+          <EmptyState
+            icon={Users}
+            title="No leads yet"
+            text="Every enquiry you add will show up here."
+            action={
+              <Button asChild>
+                <Link to="/leads/new">
+                  <Plus /> Add lead
+                </Link>
+              </Button>
+            }
+          />
         ) : filtered.length === 0 ? (
-          <EmptyState icon={Search} title="No matches" text="Try a different search or status filter." />
+          <EmptyState
+            icon={Search}
+            title="No matches"
+            text="Try a different search or status filter."
+          />
         ) : (
           <div className="grid gap-3 sm:grid-cols-2">
-            {filtered.map((l) => <LeadCard key={l.id} lead={l} />)}
+            {filtered.map((l) => (
+              <LeadCard key={l.id} lead={l} />
+            ))}
           </div>
         )}
       </div>
