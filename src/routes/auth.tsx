@@ -11,8 +11,8 @@ import { Label } from "@/components/ui/label";
 type Mode = "signin" | "signup" | "forgot";
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (s: Record<string, unknown>): { mode?: Mode } => ({
-    mode: s.mode === "signup" || s.mode === "forgot" ? s.mode : undefined,
+  validateSearch: (s: Record<string, unknown>): { mode?: Mode | undefined } => ({
+    mode: s["mode"] === "signup" || s["mode"] === "forgot" ? s["mode"] : undefined,
   }),
   head: () => ({
     meta: [
@@ -52,10 +52,10 @@ function AuthPage() {
     e.preventDefault();
     setErr(null);
     const em = email.safeParse(f.email);
-    if (!em.success) return setErr(em.error.issues[0].message);
+    if (!em.success) return setErr(em.error.issues[0]?.message ?? "Invalid input");
     if (mode !== "forgot") {
       const pw = password.safeParse(f.password);
-      if (!pw.success) return setErr(pw.error.issues[0].message);
+      if (!pw.success) return setErr(pw.error.issues[0]?.message ?? "Invalid input");
     }
     if (mode === "signup" && !f.technician_name.trim()) return setErr("Your name is required");
     setBusy(true);
