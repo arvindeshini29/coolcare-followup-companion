@@ -11,7 +11,10 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "cap:sync": "cap sync android",
+    "android:open": "cap open android",
+    "android:bundle": "cap sync android && cd android && ./gradlew bundleRelease"
   },
   "overrides": {
     "rolldown": "1.2.1"
