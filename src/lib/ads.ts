@@ -15,11 +15,11 @@ export function isAdAllowedOnPath(pathname: string): boolean {
 }
 
 export function adsEnabled(): boolean {
-  return import.meta.env.VITE_ADS_ENABLED === "true";
+  return import.meta.env["VITE_ADS_ENABLED"] === "true";
 }
 
 export function bannerAdUnitId(): string {
-  const configured = import.meta.env.VITE_ADMOB_BANNER_ID as string | undefined;
+  const configured = import.meta.env["VITE_ADMOB_BANNER_ID"] as string | undefined;
   // Use a real id only when explicitly provided for a production build.
   return configured && configured.startsWith("ca-app-pub-") ? configured : ADMOB_TEST_BANNER_ID;
 }

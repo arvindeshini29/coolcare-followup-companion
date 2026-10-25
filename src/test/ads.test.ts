@@ -7,7 +7,17 @@ describe("ad placement policy", () => {
     expect(isAdAllowedOnPath("/dashboard/")).toBe(true);
   });
   it("never allows ads on sign-in, forms or lead actions", () => {
-    for (const p of ["/auth", "/reset-password", "/leads/new", "/leads/abc", "/leads", "/follow-ups", "/templates", "/settings", "/"]) {
+    for (const p of [
+      "/auth",
+      "/reset-password",
+      "/leads/new",
+      "/leads/abc",
+      "/leads",
+      "/follow-ups",
+      "/templates",
+      "/settings",
+      "/",
+    ]) {
       expect(isAdAllowedOnPath(p)).toBe(false);
     }
   });
