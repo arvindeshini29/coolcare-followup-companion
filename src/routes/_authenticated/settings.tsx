@@ -9,6 +9,8 @@ import { PageHeader } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { DeleteAccount } from "@/components/DeleteAccount";
+import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({ meta: [{ title: "Profile — FollowUp Kit" }] }),
@@ -91,6 +93,12 @@ function Settings() {
           {saving ? "Saving…" : "Save profile"}
         </Button>
       </form>
+      {user.email && <DeleteAccount email={user.email} />}
+      <p className="mt-6 text-xs text-muted-foreground">
+        <Link to="/privacy" className="underline">
+          Privacy policy (draft)
+        </Link>
+      </p>
     </>
   );
 }
