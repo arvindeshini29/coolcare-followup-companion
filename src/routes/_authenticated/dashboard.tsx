@@ -7,6 +7,8 @@ import { PageHeader, EmptyState } from "@/components/AppShell";
 import { LeadCard } from "@/components/LeadBits";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useEffect } from "react";
+import { showNativeBanner } from "@/lib/ads";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — FollowUp Kit" }] }),
@@ -19,6 +21,18 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 });
 
 function Dashboard() {
+  useEffect(() => {
+    let cleanup = () => {};
+    let cancelled = false;
+    void showNativeBanner(window.location.pathname).then((fn) => {
+      if (cancelled) fn();
+      else cleanup = fn;
+    });
+    return () => {
+      cancelled = true;
+      cleanup();
+    };
+  }, []);
   const { data: leads } = useSuspenseQuery(leadsQuery);
   const { data: profile } = useSuspenseQuery(profileQuery);
   const today = todayISO();

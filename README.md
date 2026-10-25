@@ -61,3 +61,6 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+
+## Android release
+See [ANDROID.md](ANDROID.md) for building a signed Play Store AAB.
