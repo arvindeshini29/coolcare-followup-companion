@@ -223,6 +223,11 @@ function AuthPage() {
             </>
           )}
         </p>
+        <p className="mt-2 text-center text-xs text-muted-foreground">
+          <Link to="/privacy" className="underline">
+            Privacy policy
+          </Link>
+        </p>
       </div>
     </div>
   );

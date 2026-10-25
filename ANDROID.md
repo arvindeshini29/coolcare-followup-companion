@@ -7,8 +7,9 @@ the website. A small offline page (`android-shell/index.html`) is bundled.
 
 - Package id: `in.followupkit.app` (change in `capacitor.config.ts` and
   `android/app/build.gradle` **before** the first upload — it is permanent).
-- Default site: `https://coolcare-followup-companion.lovable.app`. Override with
-  `CAP_SERVER_URL=https://your-domain npx cap sync android`.
+- No default site URL. Every sync/build needs the live HTTPS site:
+  `CAP_SERVER_URL=https://your-live-site npx cap sync android` (it fails otherwise).
+  Open the URL in a browser first to confirm it is live.
 
 ## 0. Prerequisites (your computer)
 - Node 20+, JDK 17, Android Studio (SDK 35 platform + build tools).
@@ -17,7 +18,7 @@ the website. A small offline page (`android-shell/index.html`) is bundled.
 ## 1. Sync the Android project
 ```sh
 npm install
-npx cap sync android
+CAP_SERVER_URL=https://your-live-site npx cap sync android
 ```
 
 ## 2. Create an upload key (once — back it up, never commit it)
@@ -43,7 +44,8 @@ Test on a device first: `./gradlew installDebug` or `npx cap run android`.
   testers for 14 days** before production access — check your account.
 - Privacy policy URL (required; must mention customer data storage and, if ads are on, AdMob/advertising ID).
 - Data safety form: collects email, name, customer phone/notes (user-provided), stored encrypted in transit, user can request deletion.
-- Account deletion: Play requires an in-app path or web URL to request account deletion — add one before release.
+- Account deletion: in-app at Profile → Delete account; web URL for Play: `https://<site>/delete-account` (fill in the contact email there).
+- Privacy policy draft: `https://<site>/privacy` — review and complete the [bracketed] parts first.
 - Content rating questionnaire, target audience (not children), app category: Business.
 - Store listing: 512px icon (`public/icon-512.png`), 1024×500 feature graphic, phone screenshots.
 - Play may reject "website-only" wrappers; the app should offer clear value (it does: private CRM), and keep the offline page.
